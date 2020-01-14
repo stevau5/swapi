@@ -3,13 +3,14 @@
         <div v-if="item.birth_year">
             <p>Name: {{item.name}}</p>
             <p>Birth Year: {{item.birth_year}}</p>
-            <p>Homeworld: {{getHomeworld(item.homeworld)}} {{this.homeworld}}</p>
+            <p>Homeworld: {{getHomeworld()}} {{this.homeworld}}</p>
+            <p>Starships: {{getStarships(item.starships)}} {{this.starships}}</p>
         </div>
         <div v-else>
             <p>Model: {{item.model}}</p>
             <p>Manufacturer: {{item.manufacturer}}</p>
             <p>Starship Class: {{item.starship_class}}</p>
-            <p>Pilots: {{item.pilots}}</p>
+            <p>Pilots: </p>
         </div>
     </div>
 </template>
@@ -21,19 +22,33 @@ export default {
     name: "Showcase",
     props: {
         item: {
-            type: []
+            type: Object
         }
     },
     data() {
         return {
-            homeworld: ''
+            homeworld: '',
+            starships: [],
+            counter:  0
         }
     },
     methods: {
-        getHomeworld(home){
-            axios.get(home).then((response) => {
-                this.homeworld = response.data.name;
-            });
+        getHomeworld(){
+                axios.get(this.item.homeworld).then((response) => {
+                    this.homeworld = response.data.name;
+                });
+            
+        },
+        getStarships(ships){
+            if(this.counter == 0){
+                ships.forEach(i => {
+                    axios.get(i).then((response) => {
+                        this.starships.push(response.data.name);
+                    })
+                });
+            }
+
+            this.counter = 1;
         }
     }
 }

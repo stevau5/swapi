@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h3>Swapi</h3>
     <LeftColumn v-on:item="onReceiveItem"/>
     <div v-if="this.hasBeenReceived">
       <Showcase :item="this.currentItem"/>
@@ -25,8 +26,6 @@ export default {
   },
   methods: {
     onReceiveItem(item) {
-      // eslint-disable-next-line no-console
-      console.log(item);
       this.currentItem = item;
       this.hasBeenReceived = true; 
     }

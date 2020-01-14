@@ -2,17 +2,18 @@
   <div class="column">
     <button @click="getPeople"> GET PEOPLE </button>
     <button @click="getStarship"> GET STARSHIP </button>
+    
 
     <form @submit.prevent="searchPeople" v-if="this.lastClicked == 0">
       <label for="name"> Search People: </label>
       <input type="text" name="name" v-model="searchTerm">
-      <input type="submit" value="Search">
+      <input type="submit" value="Search"> {{this.searchResult}}
     </form>
 
     <form @submit.prevent="searchShip" v-if="this.lastClicked == 1">
       <label for="name"> Search Ship: </label>
       <input type="text" name="name" v-model="searchTerm">
-      <input type="submit" value="Search">
+      <input type="submit" value="Search"> {{this.searchResult}}
     </form>
 
     <div v-if="this.lastClicked == 0">
@@ -50,14 +51,13 @@ export default {
       people: [],
       starships: [],
       lastClicked: null,
-      searchTerm: ''
+      searchTerm: '',
+      searchResult: ''
     }
   },
 
   methods: {
     getPeople() {
-      // eslint-disable-next-line no-console
-      console.log("getPeople");
       this.lastClicked = 0
       // call swapi api for people
       axios.get(`${ROOT_URL}/people/`).then((response) => {
@@ -66,8 +66,6 @@ export default {
       })
     },
     getStarship() {
-      // eslint-disable-next-line no-console
-      console.log("getStarship");
       this.lastClicked = 1
       // call swapi api for starship
       axios.get(`${ROOT_URL}/starships/`).then((response) => {
@@ -76,8 +74,23 @@ export default {
     },
     showItem(item) {
       //emit item to component above.
-
       this.$emit('item', item);
+    },
+    searchShip(){
+      axios.get(`${ROOT_URL}/starships/?search=${this.searchTerm}`).then((response) => {
+        this.starships = response.data.results;
+      })
+    },
+    searchPeople(){      
+      axios.get(`${ROOT_URL}/people/?search=${this.searchTerm}`).then((response) => {
+        if(response.data.results < 1) {
+          this.searchResult = "no results found"
+        } else {
+          this.searchResult = `${response.data.results.length} results found`
+          this.people = response.data.results;
+        }
+        
+      });
     }
   }
 }
@@ -91,6 +104,10 @@ export default {
   }
   button{
     margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  form {
+    margin-bottom: 20px;
   }
 
 </style>
