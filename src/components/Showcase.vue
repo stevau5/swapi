@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="showcase">
         <div v-if="item.birth_year">
             <p>Name: {{item.name}}</p>
             <p>Birth Year: {{item.birth_year}}</p>
@@ -38,3 +38,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.showcase{
+    background-color: lightblue;
+    width: 70%;
+}
+</style>

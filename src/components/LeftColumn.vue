@@ -3,6 +3,18 @@
     <button @click="getPeople"> GET PEOPLE </button>
     <button @click="getStarship"> GET STARSHIP </button>
 
+    <form @submit.prevent="searchPeople" v-if="this.lastClicked == 0">
+      <label for="name"> Search People: </label>
+      <input type="text" name="name" v-model="searchTerm">
+      <input type="submit" value="Search">
+    </form>
+
+    <form @submit.prevent="searchShip" v-if="this.lastClicked == 1">
+      <label for="name"> Search Ship: </label>
+      <input type="text" name="name" v-model="searchTerm">
+      <input type="submit" value="Search">
+    </form>
+
     <div v-if="this.lastClicked == 0">
       <p 
         v-for="name in this.people" 
@@ -38,7 +50,7 @@ export default {
       people: [],
       starships: [],
       lastClicked: null,
-      args: []
+      searchTerm: ''
     }
   },
 
@@ -77,4 +89,8 @@ export default {
     width: 25%;
     background-color: #eee;
   }
+  button{
+    margin-right: 20px;
+  }
+
 </style>
