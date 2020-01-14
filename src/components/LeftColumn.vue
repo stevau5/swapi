@@ -2,14 +2,12 @@
   <div class="column">
     <button @click="getPeople"> GET PEOPLE </button>
     <button @click="getStarship"> GET STARSHIP </button>
-    <br>
-    <br>
 
     <div v-if="this.lastClicked == 0">
       <p 
         v-for="name in this.people" 
         :key="name" 
-        @click="test"
+        @click="showItem(name)"
       > {{ name.name }} </p>
     </div>
 
@@ -17,7 +15,7 @@
       <p
         v-for="ship in this.starships"
         :key="ship"
-        @click="test"
+        @click="showItem(ship)"
       > {{ship.name}}</p>
     </div>
     
@@ -63,9 +61,10 @@ export default {
         this.starships = response.data.results;
       })
     },
-    test() {
+    showItem(item) {
       // eslint-disable-next-line no-console
-      console.log("hello")
+      console.log(item);
+      //emit item to component above. 
     }
   }
 }
