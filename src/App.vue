@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <LeftColumn/>
+    <LeftColumn v-on:item="test"/>
     <div v-if="true">
       <Showcase />
     </div>
@@ -16,6 +16,17 @@ export default {
   components: {
     LeftColumn,
     Showcase
+  },
+  props: {
+    currentItem: {
+      type: []
+    }
+  },
+  methods: {
+    test(item) {
+      // eslint-disable-next-line no-console
+      console.log(item);
+    }
   }
 }
 </script>

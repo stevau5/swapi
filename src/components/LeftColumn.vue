@@ -62,9 +62,8 @@ export default {
       })
     },
     showItem(item) {
-      // eslint-disable-next-line no-console
-      console.log(item);
       //emit item to component above. 
+      this.$emit('item', item);
     }
   }
 }
