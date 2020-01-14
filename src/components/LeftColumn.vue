@@ -37,7 +37,8 @@ export default {
     return {
       people: [],
       starships: [],
-      lastClicked: null
+      lastClicked: null,
+      args: []
     }
   },
 
@@ -62,7 +63,8 @@ export default {
       })
     },
     showItem(item) {
-      //emit item to component above. 
+      //emit item to component above.
+
       this.$emit('item', item);
     }
   }

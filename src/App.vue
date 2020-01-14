@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <LeftColumn v-on:item="test"/>
-    <div v-if="true">
-      <Showcase />
+    <LeftColumn v-on:item="onReceiveItem"/>
+    <div v-if="this.hasBeenReceived">
+      <Showcase :item="this.currentItem"/>
     </div>
   </div>
 </template>
@@ -17,15 +17,18 @@ export default {
     LeftColumn,
     Showcase
   },
-  props: {
-    currentItem: {
-      type: []
+  data() {
+    return {
+      hasBeenReceived: false,
+      currentItem: []
     }
   },
   methods: {
-    test(item) {
+    onReceiveItem(item) {
       // eslint-disable-next-line no-console
       console.log(item);
+      this.currentItem = item;
+      this.hasBeenReceived = true; 
     }
   }
 }
