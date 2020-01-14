@@ -24,13 +24,15 @@ export default {
     props: {
         item: {
             type: Object
+        },
+        counter: {
+            type: Number
         }
     },
     data() {
         return {
             homeworld: '',
             starships: [],
-            counter:  0
         }
     },
     methods: {
@@ -42,6 +44,7 @@ export default {
         },
         getStarships(ships){
             if(this.counter == 0){
+                this.starships = []
                 ships.forEach(i => {
                     axios.get(i).then((response) => {
                         this.starships.push(response.data.name);

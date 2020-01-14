@@ -2,7 +2,7 @@
   <div id="app">
     <LeftColumn v-on:item="onReceiveItem"/>
     <div v-if="this.hasBeenReceived">
-      <Showcase :item="this.currentItem"/>
+      <Showcase :item="this.currentItem" :counter=0 />
     </div>
   </div>
 </template>
