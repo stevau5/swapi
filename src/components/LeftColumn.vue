@@ -1,5 +1,6 @@
 <template>
   <div class="column">
+    <h3>Swapi</h3>
     <button @click="getPeople"> GET PEOPLE </button>
     <button @click="getStarship"> GET STARSHIP </button>
     
@@ -59,11 +60,12 @@ export default {
   methods: {
     getPeople() {
       this.lastClicked = 0
-      // call swapi api for people
-      axios.get(`${ROOT_URL}/people/`).then((response) => {
-        //store in local data    
-        this.people = response.data.results;
-      })
+        // call swapi api for people
+        axios.get(`${ROOT_URL}/people/`).then((response) => {
+          //store in local data    
+          this.people =response.data.results;
+        })
+      
     },
     getStarship() {
       this.lastClicked = 1
@@ -101,6 +103,7 @@ export default {
   .column {
     width: 25%;
     background-color: #eee;
+    margin-right: 50px;
   }
   button{
     margin-right: 20px;
@@ -108,6 +111,13 @@ export default {
   }
   form {
     margin-bottom: 20px;
+  }
+  p:hover {
+    background-color: white;
+    cursor: pointer;
+  }
+  h3{
+    text-align: center;
   }
 
 </style>

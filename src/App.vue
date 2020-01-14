@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h3>Swapi</h3>
     <LeftColumn v-on:item="onReceiveItem"/>
     <div v-if="this.hasBeenReceived">
       <Showcase :item="this.currentItem"/>
@@ -21,7 +20,7 @@ export default {
   data() {
     return {
       hasBeenReceived: false,
-      currentItem: []
+      currentItem: Object
     }
   },
   methods: {
@@ -40,7 +39,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
-  display: block;
+  display:flex;
   
 }
 </style>
