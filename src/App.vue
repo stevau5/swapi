@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <LeftColumn v-on:item="onReceiveItem"/>
-    <div v-if="this.hasBeenReceived">
-      <Showcase :item="this.currentItem"/>
+    <div v-if="hasBeenReceived">
+      <Showcase :item="currentItem"/> 
     </div>
   </div>
 </template>

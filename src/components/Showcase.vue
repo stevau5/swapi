@@ -1,11 +1,12 @@
 <template>
     <div class="showcase">
         <h3>Results</h3>
-        <div v-if="item.birth_year">
+        <!-- <component :is="getResourceDetailView"  /> -->
+        <div v-if="isPerson">
             <p>Name: {{item.name}}</p>
             <p>Birth Year: {{item.birth_year}}</p>
             <p>Homeworld: {{homeworld}}</p>
-            <p >Starships: {{getStarships(item.starships)}} {{this.starships}}</p>
+            <p >Starships: {{getStarships(item.starships)}} {{starships}}</p>
         </div>
         <div v-else>
             <p>Model: {{item.model}}</p>
@@ -17,7 +18,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import swapi from '../api/swapi';
+// import Person....;
 
 export default {
     name: "Showcase",
@@ -28,6 +30,8 @@ export default {
     },
     watch: {
         item() {
+            // eslint-disable-next-line no-console
+            console.log("change on item");
             this.getHomeworld();
             this.s_counter = 0;
             this.p_counter = 0; 
@@ -42,10 +46,15 @@ export default {
             p_counter: 0
         }
     },
+    computed: {
+        isPerson() {
+            return this.item.hasOwnProperty("birth_year");
+        }
+    },
     methods: {
         async getHomeworld(){
             try {
-                const response = await axios.get(this.item.homeworld);
+                const response = await swapi.getHomeworld(this.item.homeworld);
                 this.homeworld = response.data.name;
                 // eslint-disable-next-line no-console
                 console.log(response.data.name)
@@ -54,12 +63,19 @@ export default {
                 console.log(error)
             }
         },
+
+        // getResourceDetailedView() {
+        //     if (this.currentResource === "person") {
+        //         return PersonDetailView;
+        //     }
+        // },
+
         getStarships(ships){
             if(this.s_counter == 0){
                 this.starships = []
                 ships.forEach(async i => {
                     try {
-                        const response = await axios.get(i)
+                        const response = await swapi.getStarships(i);
                         this.starships.push(response.data.name); 
                     } catch(error){
                         // eslint-disable-next-line no-console
@@ -72,10 +88,9 @@ export default {
         getPilots(pilot){
             if(this.p_counter == 0){
                 this.pilots = []
-                pilot.forEach(i => {
-                    axios.get(i).then((response) => {
-                        this.pilots.push(response.data);
-                    })
+                pilot.forEach(async i => {
+                    const response = await swapi.getPilots(i);
+                    this.pilots.push(response.data);
                 })
             }
             this.p_counter == 1;
