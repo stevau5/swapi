@@ -11,7 +11,7 @@
             <p>Model: {{item.model}}</p>
             <p>Manufacturer: {{item.manufacturer}}</p>
             <p>Starship Class: {{item.starship_class}}</p>
-            <p>Pilots: {{getPilots(item.pilots)}} {{this.pilots}}</p>
+            <!-- <p>Pilots: {{getPilots(item.pilots)}} {{this.pilots}}</p> -->
         </div>
     </div>
 </template>
@@ -40,22 +40,28 @@ export default {
         }
     },
     methods: {
-        getHomeworld(){
-                axios.get(this.item.homeworld).then((response) => {
-                    this.homeworld = response.data.name;
-                });
-            
+        async getHomeworld(){
+            try {
+                const response = await axios.get(this.item.homeworld);
+                this.homeworld = response.data.name;
+            } catch(error) {
+                // eslint-disable-next-line no-console
+                console.log(error)
+            }
         },
         getStarships(ships){
             if(this.s_counter == 0){
                 this.starships = []
-                ships.forEach(i => {
-                    axios.get(i).then((response) => {
-                        this.starships.push(response.data.name);
-                    })
+                ships.forEach(async i => {
+                    try {
+                        const response = await axios.get(i)
+                        this.starships.push(response.data.name); 
+                    } catch(error){
+                        // eslint-disable-next-line no-console
+                        console.log(error)
+                    }
                 });
             }
-
             this.s_counter = 1;
         },
         getPilots(pilot){

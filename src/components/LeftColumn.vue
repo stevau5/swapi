@@ -66,61 +66,76 @@ export default {
   },
 
   methods: {
-    getPeople() {
-      this.lastClicked = 0
-      this.isPeopleButtonDisabled = true
-        // call swapi api for people
-        axios.get(`${ROOT_URL}/people/`).then((response) => {
-          //store in local data    
-          this.people =response.data.results;
-          this.isPeopleButtonDisabled = false
-        })
-      
+    async getPeople() {
+      try {
+        this.lastClicked = 0
+        this.isPeopleButtonDisabled = true
+        const response = await axios.get(`${ROOT_URL}/people/`);
+        this.people =response.data.results;
+        this.isPeopleButtonDisabled = false
+      } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log(error)
+      }
     },
-    getStarship() {
-      this.lastClicked = 1
-      this.isStarshipButtonDisabled = true
-      // call swapi api for starship
-      axios.get(`${ROOT_URL}/starships/`).then((response) => {
+    async getStarship() {
+      try {
+        this.lastClicked = 1
+        this.isStarshipButtonDisabled = true
+        const response = await axios.get(`${ROOT_URL}/starships/`);
         this.starships = response.data.results;
         this.isStarshipButtonDisabled = false
-      })
+      } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        }
     },
     showItem(item) {
       //emit item to component above.
       this.$emit('item', item);
     },
-    searchShip(){
-      axios.get(`${ROOT_URL}/starships/?search=${this.searchTerm}`).then((response) => {
+    async searchShip(){
+      try {
+        const response = await axios.get(`${ROOT_URL}/starships/?search=${this.searchTerm}`);
         this.starships = response.data.results;
-      })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
     },
-    searchPeople(){      
-      axios.get(`${ROOT_URL}/people/?search=${this.searchTerm}`).then((response) => {
+    async searchPeople(){      
+      try {
+        const response = await axios.get(`${ROOT_URL}/people/?search=${this.searchTerm}`);
         if(response.data.results < 1) {
           this.searchResult = "no results found"
         } else {
           this.searchResult = `${response.data.results.length} results found`
           this.people = response.data.results;
         }
-        
-      });
+      } catch(error){
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
     },
-    loadMoreItems(){
-      this.isLoadMoreBUttonDisabled = true
-      if(this.lastClicked == 0 && this.currentPeoplePage < 8){      
-          axios.get(`${ROOT_URL}/people/?page=${this.currentPeoplePage}`).then((response) => {
+    async loadMoreItems(){
+      try {
+        this.isLoadMoreBUttonDisabled = true
+        if(this.lastClicked == 0 && this.currentPeoplePage < 8){      
+            const response = await axios.get(`${ROOT_URL}/people/?page=${this.currentPeoplePage}`);
             this.people = response.data.results; 
             this.currentPeoplePage++; 
             this.isLoadMoreBUttonDisabled = false; 
-          })
-      } else if(this.lastClicked == 1 && this.currentStarshipPage < 5){
-            axios.get(`${ROOT_URL}/starships/?page=${this.currentStarshipPage}`).then((response) => {
-              this.starships = response.data.results
-              this.currentStarshipPage++;
-              this.isLoadMoreBUttonDisabled = false; 
-            }) 
-        }
+        
+        } else if(this.lastClicked == 1 && this.currentStarshipPage < 5){
+            const response = await axios.get(`${ROOT_URL}/starships/?page=${this.currentStarshipPage}`); 
+            this.starships = response.data.results
+            this.currentStarshipPage++;
+            this.isLoadMoreBUttonDisabled = false;  
+          }
+      } catch(error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
     }
   }
 }
