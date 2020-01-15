@@ -19,16 +19,16 @@
 
     <div v-if="this.lastClicked == 0">
       <p 
-        v-for="name in this.people" 
-        :key="name" 
-        @click="showItem(name)"
-      > {{ name.name }} </p>
+        v-for="person in this.people" 
+        :key="person.name" 
+        @click="showItem(person)"
+      > {{ person.name }} </p>
     </div>
 
     <div v-if="this.lastClicked == 1">
       <p
         v-for="ship in this.starships"
-        :key="ship"
+        :key="ship.name"
         @click="showItem(ship)"
       > {{ship.name}}</p>
     </div>

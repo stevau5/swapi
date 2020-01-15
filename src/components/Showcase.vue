@@ -4,8 +4,8 @@
         <div v-if="item.birth_year">
             <p>Name: {{item.name}}</p>
             <p>Birth Year: {{item.birth_year}}</p>
-            <p>Homeworld: {{getHomeworld()}} {{this.homeworld}}</p>
-            <p>Starships: {{getStarships(item.starships)}} {{this.starships}}</p>
+            <p>Homeworld: {{homeworld}}</p>
+            <p >Starships: {{getStarships(item.starships)}} {{this.starships}}</p>
         </div>
         <div v-else>
             <p>Model: {{item.model}}</p>
@@ -25,18 +25,21 @@ export default {
         item: {
             type: Object
         },
-        s_counter: {
-            type: Number
-        },
-        p_counter: {
-            type: Number
+    },
+    watch: {
+        item() {
+            this.getHomeworld();
+            this.s_counter = 0;
+            this.p_counter = 0; 
         }
     },
     data() {
         return {
             homeworld: '',
             starships: [],
-            pilots: []
+            pilots: [],
+            s_counter: 0,
+            p_counter: 0
         }
     },
     methods: {
@@ -44,6 +47,8 @@ export default {
             try {
                 const response = await axios.get(this.item.homeworld);
                 this.homeworld = response.data.name;
+                // eslint-disable-next-line no-console
+                console.log(response.data.name)
             } catch(error) {
                 // eslint-disable-next-line no-console
                 console.log(error)
