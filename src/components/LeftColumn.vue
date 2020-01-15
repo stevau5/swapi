@@ -1,8 +1,8 @@
 <template>
   <div class="column">
     <h3>Swapi</h3>
-    <button @click="getPeople"> GET PEOPLE </button>
-    <button @click="getStarship"> GET STARSHIP </button>
+    <button @click="getPeople" :disabled="isPeopleButtonDisabled"> GET PEOPLE </button>
+    <button @click="getStarship" :disabled="isStarshipButtonDisabled"> GET STARSHIP </button>
     
 
     <form @submit.prevent="searchPeople" v-if="this.lastClicked == 0">
@@ -33,8 +33,8 @@
       > {{ship.name}}</p>
     </div>
 
-    <div class="loadMoreButton">
-      <button @click="loadMoreItems"> LOAD MORE </button>
+    <div class="loadMoreButton" v-if="this.lastClicked === 0 || this.lastClicked === 1">
+      <button @click="loadMoreItems" :disabled="this.isLoadMoreBUttonDisabled"> LOAD MORE </button>
     </div>
   </div>
 </template>
@@ -58,25 +58,32 @@ export default {
       searchTerm: '',
       searchResult: '',
       currentPeoplePage: 2,
-      currentStarshipPage: 2, 
+      currentStarshipPage: 2,
+      isPeopleButtonDisabled: false,
+      isStarshipButtonDisabled: false,
+      isLoadMoreBUttonDisabled: false  
     }
   },
 
   methods: {
     getPeople() {
       this.lastClicked = 0
+      this.isPeopleButtonDisabled = true
         // call swapi api for people
         axios.get(`${ROOT_URL}/people/`).then((response) => {
           //store in local data    
           this.people =response.data.results;
+          this.isPeopleButtonDisabled = false
         })
       
     },
     getStarship() {
       this.lastClicked = 1
+      this.isStarshipButtonDisabled = true
       // call swapi api for starship
       axios.get(`${ROOT_URL}/starships/`).then((response) => {
         this.starships = response.data.results;
+        this.isStarshipButtonDisabled = false
       })
     },
     showItem(item) {
@@ -100,20 +107,19 @@ export default {
       });
     },
     loadMoreItems(){
-      if(this.lastClicked == 0){      
-        if(this.currentPeoplePage < 8) {
+      this.isLoadMoreBUttonDisabled = true
+      if(this.lastClicked == 0 && this.currentPeoplePage < 8){      
           axios.get(`${ROOT_URL}/people/?page=${this.currentPeoplePage}`).then((response) => {
             this.people = response.data.results; 
             this.currentPeoplePage++; 
+            this.isLoadMoreBUttonDisabled = false; 
           })
-        }
-      } else if(this.lastClicked == 1){
-          if(this.currentStarshipPage < 5) {
+      } else if(this.lastClicked == 1 && this.currentStarshipPage < 5){
             axios.get(`${ROOT_URL}/starships/?page=${this.currentStarshipPage}`).then((response) => {
               this.starships = response.data.results
               this.currentStarshipPage++;
-            })
-          }
+              this.isLoadMoreBUttonDisabled = false; 
+            }) 
         }
     }
   }

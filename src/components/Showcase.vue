@@ -11,7 +11,7 @@
             <p>Model: {{item.model}}</p>
             <p>Manufacturer: {{item.manufacturer}}</p>
             <p>Starship Class: {{item.starship_class}}</p>
-            <p>Pilots: </p>
+            <p>Pilots: {{getPilots(item.pilots)}} {{this.pilots}}</p>
         </div>
     </div>
 </template>
@@ -25,7 +25,10 @@ export default {
         item: {
             type: Object
         },
-        counter: {
+        s_counter: {
+            type: Number
+        },
+        p_counter: {
             type: Number
         }
     },
@@ -33,6 +36,7 @@ export default {
         return {
             homeworld: '',
             starships: [],
+            pilots: []
         }
     },
     methods: {
@@ -43,7 +47,7 @@ export default {
             
         },
         getStarships(ships){
-            if(this.counter == 0){
+            if(this.s_counter == 0){
                 this.starships = []
                 ships.forEach(i => {
                     axios.get(i).then((response) => {
@@ -52,8 +56,20 @@ export default {
                 });
             }
 
-            this.counter = 1;
+            this.s_counter = 1;
+        },
+        getPilots(pilot){
+            if(this.p_counter == 0){
+                this.pilots = []
+                pilot.forEach(i => {
+                    axios.get(i).then((response) => {
+                        this.pilots.push(response.data);
+                    })
+                })
+            }
+            this.p_counter == 1;
         }
+
     }
 }
 </script>
