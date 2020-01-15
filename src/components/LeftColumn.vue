@@ -32,7 +32,10 @@
         @click="showItem(ship)"
       > {{ship.name}}</p>
     </div>
-    
+
+    <div class="loadMoreButton">
+      <button @click="loadMoreItems"> LOAD MORE </button>
+    </div>
   </div>
 </template>
 
@@ -53,7 +56,9 @@ export default {
       starships: [],
       lastClicked: null,
       searchTerm: '',
-      searchResult: ''
+      searchResult: '',
+      currentPeoplePage: 2,
+      currentStarshipPage: 2, 
     }
   },
 
@@ -93,6 +98,23 @@ export default {
         }
         
       });
+    },
+    loadMoreItems(){
+      if(this.lastClicked == 0){      
+        if(this.currentPeoplePage < 8) {
+          axios.get(`${ROOT_URL}/people/?page=${this.currentPeoplePage}`).then((response) => {
+            this.people = response.data.results; 
+            this.currentPeoplePage++; 
+          })
+        }
+      } else if(this.lastClicked == 1){
+          if(this.currentStarshipPage < 5) {
+            axios.get(`${ROOT_URL}/starships/?page=${this.currentStarshipPage}`).then((response) => {
+              this.starships = response.data.results
+              this.currentStarshipPage++;
+            })
+          }
+        }
     }
   }
 }
