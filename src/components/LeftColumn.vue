@@ -62,42 +62,61 @@ export default {
 
   methods: {
     async getResource(resource) {
-      this.resource = resource;
-      this.toggleButton(resource)
-      const response = await swapi.getResource(resource);
-      this.resourceItems = response.data.results;
-      this[resource] = response.data.results;
-      this.toggleButton(resource)
+      try {
+        this.resource = resource;
+        this.toggleButton(resource)
+        const response = await swapi.getResource(resource);
+        this.resourceItems = response.data.results;
+        this[resource] = response.data.results;
+        this.toggleButton(resource)
+      } catch(error){
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
     },
+
     showItem(item) {
       //emit item to component above.
       this.$emit('item', item);
     },
+
     async searchResource(resource){
-      const response = await swapi.searchResource(this.searchTerm, resource);
-      if(response.data.results < 1) {
-        this.searchResult = "no results found"
-      } else {
-        this.searchResult = `${response.data.results.length} results found`
-        this.resourceItems = response.data.results;
-        this[resource] = response.data.results;
+      try {
+        const response = await swapi.searchResource(this.searchTerm, resource);
+        if(response.data.results < 1) {
+          this.searchResult = "no results found"
+        } else {
+          this.searchResult = `${response.data.results.length} results found`
+          this.resourceItems = response.data.results;
+          this[resource] = response.data.results;
+        }
+      } catch(error){
+        // eslint-disable-next-line no-console
+        console.log(error)
       }
     },
+
     async loadMoreResourceItems(resource){
-      this.isLoadMoreBUttonDisabled = true;
-      if(resource === "people" && this.currentPeoplePage < 9){
-        const response = await swapi.loadMoreResourceItems(resource, this.currentPeoplePage);
-        this.resourceItems = response.data.results; 
-        this[resource] = response.data.results;
-        this.currentPeoplePage++
-      } else if(resource === "starships" && this.currentStarshipPage < 5){
-          const response = await swapi.loadMoreResourceItems(resource, this.currentStarshipPage);
+      try{
+        this.isLoadMoreBUttonDisabled = true;
+        if(resource === "people" && this.currentPeoplePage < 9){
+          const response = await swapi.loadMoreResourceItems(resource, this.currentPeoplePage);
           this.resourceItems = response.data.results; 
           this[resource] = response.data.results;
-          this.currentStarshipPage++;
+          this.currentPeoplePage++
+        } else if(resource === "starships" && this.currentStarshipPage < 5){
+            const response = await swapi.loadMoreResourceItems(resource, this.currentStarshipPage);
+            this.resourceItems = response.data.results; 
+            this[resource] = response.data.results;
+            this.currentStarshipPage++;
+        }
+        this.isLoadMoreBUttonDisabled = false; 
+      } catch(error){
+        // eslint-disable-next-line no-console
+        console.log(error)
       }
-      this.isLoadMoreBUttonDisabled = false; 
     },
+
     toggleButton(resource){
       if(resource === 'people' && !this.isPeopleButtonDisabled){
         this.isPeopleButtonDisabled = true
