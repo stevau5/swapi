@@ -1,17 +1,17 @@
 <template>
   <div class="column">
     <h3>Swapi</h3>
-    <button @click="getResource('people')" :disabled="isPeopleButtonDisabled"> GET PEOPLE </button>
-    <button @click="getResource('starships')" :disabled="isStarshipButtonDisabled"> GET STARSHIP </button>
+    <button @click="getResources('people')" :disabled="isPeopleButtonDisabled"> GET PEOPLE </button>
+    <button @click="getResources('starships')" :disabled="isStarshipButtonDisabled"> GET STARSHIP </button>
     
 
-    <form @submit.prevent="searchResource('people')" v-if="resource === 'people'">
+    <form @submit.prevent="searchResources('people')" v-if="resource === 'people'">
       <label for="name"> Search People: </label>
       <input type="text" name="name" v-model="searchTerm">
       <input type="submit" value="Search"> {{searchResult}}
     </form>
 
-    <form @submit.prevent="searchResource('starships')" v-if="resource === 'starships'">
+    <form @submit.prevent="searchResources('starships')" v-if="resource === 'starships'">
       <label for="name"> Search Ship: </label>
       <input type="text" name="name" v-model="searchTerm">
       <input type="submit" value="Search"> {{searchResult}}
@@ -19,7 +19,7 @@
 
     <div v-if="resource !== null">
       <p
-      v-for="resource in resourceItems"
+      v-for="resource in resources"
       :key="resource.name"
       @click="showItem(resource)"
       >{{resource.name}}</p>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import swapi from '../api/swapi';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
 
@@ -43,10 +43,6 @@ export default {
   data() {
     return {
       resource: null,
-      resourceItems: [],
-
-      people: [],
-      starships: [],
 
       searchTerm: '',
       searchResult: '',
@@ -59,20 +55,15 @@ export default {
       isLoadMoreBUttonDisabled: false  
     }
   },
+  computed: {
+    ...mapGetters(['allResources']),
+    ...mapState(['resources']),
+  },
 
   methods: {
-    async getResource(resource) {
-      try {
-        this.resource = resource;
-        this.toggleButton(resource)
-        const response = await swapi.getResource(resource);
-        this.resourceItems = response.data.results;
-        this[resource] = response.data.results;
-        this.toggleButton(resource)
-      } catch(error){
-        // eslint-disable-next-line no-console
-        console.log(error);
-      }
+    getResources(resource) {
+      this.resource = resource;
+      this.$store.dispatch('fetchResources', resource);
     },
 
     showItem(item) {
@@ -80,40 +71,29 @@ export default {
       this.$emit('item', item);
     },
 
-    async searchResource(resource){
-      try {
-        const response = await swapi.searchResource(this.searchTerm, resource);
-        if(response.data.results < 1) {
-          this.searchResult = "no results found"
-        } else {
-          this.searchResult = `${response.data.results.length} results found`
-          this.resourceItems = response.data.results;
-          this[resource] = response.data.results;
-        }
-      } catch(error){
-        // eslint-disable-next-line no-console
-        console.log(error)
+    searchResources(resource){
+      const payload = {
+        searchTerm: this.searchTerm,
+        resource,
       }
+      this.$store.dispatch('searchResources', payload);
     },
 
-    async loadMoreResourceItems(resource){
-      try{
-        this.isLoadMoreBUttonDisabled = true;
-        if(resource === "people" && this.currentPeoplePage < 9){
-          const response = await swapi.loadMoreResourceItems(resource, this.currentPeoplePage);
-          this.resourceItems = response.data.results; 
-          this[resource] = response.data.results;
-          this.currentPeoplePage++
-        } else if(resource === "starships" && this.currentStarshipPage < 5){
-            const response = await swapi.loadMoreResourceItems(resource, this.currentStarshipPage);
-            this.resourceItems = response.data.results; 
-            this[resource] = response.data.results;
-            this.currentStarshipPage++;
+    loadMoreResourceItems(resource){
+      if(this.currentPeoplePage < 9 && resource === "people"){
+        const payload = {
+          resource, 
+          page: this.currentPeoplePage
         }
-        this.isLoadMoreBUttonDisabled = false; 
-      } catch(error){
-        // eslint-disable-next-line no-console
-        console.log(error)
+        this.$store.dispatch('loadItems', payload);
+        this.currentPeoplePage++
+      } else if(this.currentStarshipPage < 5 && resource === "starships") {
+        const payload = {
+          resource, 
+          page: this.currentStarshipPage
+        }
+        this.$store.dispatch('loadItems', payload)
+        this.currentStarshipPage++
       }
     },
 
