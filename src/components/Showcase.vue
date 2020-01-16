@@ -50,18 +50,16 @@ export default {
     },
     methods: {
         getHomeworld() {
-            const payload = {
+            this.$store.dispatch('getHomeworld', {
                 homeworld: this.item.homeworld 
-            }
-            this.$store.dispatch('getHomeworld', payload);
+            });
         },
         getStarships(ships){
             if(this.s_counter === 0) {
                 this.$store.commit('setStarshipsToEmpty')
-                const payload = {
+                this.$store.dispatch('getStarships', {
                     ships
-                }
-                this.$store.dispatch('getStarships', payload)
+                })
                 this.s_counter = 1
             }
         },
@@ -69,10 +67,9 @@ export default {
         getPilots(pilots) {
             if(this.p_counter == 0) {
                 this.$store.commit('setPilotsToEmpty')
-                const payload = {
+                this.$store.dispatch('getPilots', {
                     pilots
-                }
-                this.$store.dispatch('getPilots', payload)
+                })
                 this.p_counter = 1
             }
         }

@@ -80,28 +80,25 @@ export default {
     },
 
     searchResources(resource){
-      const payload = {
+      this.$store.dispatch('searchResources', {
         searchTerm: this.searchTerm,
         resource,
-      }
-      this.$store.dispatch('searchResources', payload);
+      });
     },
 
     loadMoreResourceItems(resource){
       if(this.currentPeoplePage < 9 && resource === "people"){
-        const payload = {
+        this.$store.dispatch('loadItems', {
           resource, 
           page: this.currentPeoplePage
-        }
-        this.$store.dispatch('loadItems', payload);
+        });
         this.currentPeoplePage++
       } else if(this.currentStarshipPage < 5 && resource === "starships") {
-        const payload = {
-          resource, 
-          page: this.currentStarshipPage
-        }
-        this.$store.dispatch('loadItems', payload)
-        this.currentStarshipPage++
+          this.$store.dispatch('loadItems', {
+            resource, 
+            page: this.currentStarshipPage
+          })
+          this.currentStarshipPage++
       }
     },
     buttonToggle(resource){

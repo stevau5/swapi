@@ -54,7 +54,7 @@ const actions = {
     },
     async searchResources({commit}, payload) {
         try {
-            const response = await swapi.searchResource(payload.searchTerm, payload.resource); 
+            const response = await swapi.searchResource(payload); 
             commit({
                 type: 'setResources',
                 resources: response.data.results
@@ -66,7 +66,7 @@ const actions = {
     },
     async loadItems({commit}, payload) {
         try {
-            const response = await swapi.loadMoreResourceItems(payload.resource, payload.page)
+            const response = await swapi.loadMoreResourceItems(payload)
             commit({
                 type: 'setResources',
                 resources: response.data.results 
@@ -76,9 +76,9 @@ const actions = {
             console.log(error)
         }
     },
-    async getHomeworld({commit}, payload) {
+    async getHomeworld({commit}, {homeworld}) {
         try {
-            const response = await swapi.getHomeworld(payload.homeworld);
+            const response = await swapi.getHomeworld(homeworld);
             commit({
                 type: 'setHomeworld',
                 homeworld: response.data.name

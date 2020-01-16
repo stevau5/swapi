@@ -14,10 +14,10 @@ export default {
     getResource(resource){
         return axios.get(`${ROOT_URL}/${resource}/`)
     },
-    searchResource(searchTerm, resource){
+    searchResource({searchTerm, resource}){
         return axios.get(`${ROOT_URL}/${resource}/?search=${searchTerm}`);
     },
-    loadMoreResourceItems(resource, page){
+    loadMoreResourceItems({resource, page}){
         return axios.get(`${ROOT_URL}/${resource}/?page=${page}`)
     }
 }
