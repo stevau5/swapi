@@ -62,8 +62,10 @@ export default {
 
   methods: {
     getResources(resource) {
+      this.toggleButton(resource, true)
       this.resource = resource;
       this.$store.dispatch('fetchResources', resource);
+      this.toggleButton(resource, false)
     },
 
     showItem(item) {
@@ -97,15 +99,12 @@ export default {
       }
     },
 
-    toggleButton(resource){
-      if(resource === 'people' && !this.isPeopleButtonDisabled){
-        this.isPeopleButtonDisabled = true
-      } else if(resource === 'starships' && !this.isStarshipButtonDisabled){
-          this.isStarshipButtonDisabled = true
-      } else if(resource === 'people' && this.isPeopleButtonDisabled){
-        this.isPeopleButtonDisabled = false
-      } else if(resource === 'starships' && this.isPeopleButtonDisabled)
-      this.isStarshipButtonDisabled = false; 
+    toggleButton(resource, status){
+      if(resource === 'people'){
+        this.isPeopleButtonDisabled = status
+      } else if(resource === 'starships'){
+        this.isStarshipButtonDisabled = status
+      }
     }
   }
 }

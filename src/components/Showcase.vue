@@ -19,6 +19,8 @@
 
 <script>
 import swapi from '../api/swapi';
+import { mapState } from 'vuex';
+
 // import Person....;
 
 export default {
@@ -39,7 +41,6 @@ export default {
     },
     data() {
         return {
-            homeworld: '',
             starships: [],
             pilots: [],
             s_counter: 0,
@@ -49,10 +50,11 @@ export default {
     computed: {
         isPerson() {
             return this.item.hasOwnProperty("birth_year");
-        }
+        },
+        ...mapState(['homeworld'])
     },
     methods: {
-        async getHomeworld(){
+        async getHomeworldx(){
             try {
                 const response = await swapi.getHomeworld(this.item.homeworld);
                 this.homeworld = response.data.name;
@@ -62,6 +64,13 @@ export default {
                 // eslint-disable-next-line no-console
                 console.log(error)
             }
+        },
+
+        getHomeworld() {
+            const payload = {
+                homeworld: this.item.homeworld 
+            }
+            this.$store.dispatch('getHomeworld', payload);
         },
 
         // getResourceDetailedView() {
