@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <LeftColumn v-on:item="onReceiveItem"/>
-    <div v-if="hasBeenReceived">
+    <div v-if="currentItem">
       <Showcase :item="currentItem"/> 
     </div>
   </div>
@@ -19,14 +19,12 @@ export default {
   },
   data() {
     return {
-      hasBeenReceived: false,
-      currentItem: Object
+      currentItem: null
     }
   },
   methods: {
     onReceiveItem(item) {
       this.currentItem = item;
-      this.hasBeenReceived = true; 
     }
   }
 }
