@@ -11,11 +11,13 @@
 import LeftColumn from './components/LeftColumn.vue'
 import Showcase from './components/Showcase'
 
+
 export default {
   name: 'app',
   components: {
     LeftColumn,
-    Showcase
+    Showcase,
+    
   },
   data() {
     return {
