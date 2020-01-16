@@ -1,8 +1,8 @@
 <template>
   <div class="column">
     <h3>Swapi</h3>
-    <button @click="getResources('people')" :disabled="isPeopleButtonDisabled"> GET PEOPLE </button>
-    <button @click="getResources('starships')" :disabled="isStarshipButtonDisabled"> GET STARSHIP </button>
+    <button @click="getResources('people')" :disabled="isPeopleButtonHidden"> GET PEOPLE </button>
+    <button @click="getResources('starships')" :disabled="isStarshipButtonHidden"> GET STARSHIP </button>
     
 
     <form @submit.prevent="searchResources('people')" v-if="resource === 'people'">
@@ -50,11 +50,19 @@ export default {
       currentPeoplePage: 2,
       currentStarshipPage: 2,
 
-      isPeopleButtonDisabled: false,
-      isStarshipButtonDisabled: false,
-      isLoadMoreBUttonDisabled: false  
+      isLoadMoreBUttonDisabled: false,
+      isPeopleButtonHidden: false, 
+      isStarshipButtonHidden: false,
     }
   },
+  watch: {
+    resources() {
+      this.buttonToggle(this.resource)
+      // eslint-disable-next-line no-console
+      console.log("changes")
+    }
+  },
+
   computed: {
     ...mapGetters(['allResources']),
     ...mapState(['resources']),
@@ -62,10 +70,8 @@ export default {
 
   methods: {
     getResources(resource) {
-      this.toggleButton(resource, true)
       this.resource = resource;
       this.$store.dispatch('fetchResources', resource);
-      this.toggleButton(resource, false)
     },
 
     showItem(item) {
@@ -98,12 +104,13 @@ export default {
         this.currentStarshipPage++
       }
     },
-
-    toggleButton(resource, status){
-      if(resource === 'people'){
-        this.isPeopleButtonDisabled = status
-      } else if(resource === 'starships'){
-        this.isStarshipButtonDisabled = status
+    buttonToggle(resource){
+      if(resource === 'people') {
+        this.isPeopleButtonHidden = true,
+        this.isStarshipButtonHidden = false
+      } else if(resource === 'starships') {
+        this.isPeopleButtonHidden = false,
+        this.isStarshipButtonHidden = true
       }
     }
   }
