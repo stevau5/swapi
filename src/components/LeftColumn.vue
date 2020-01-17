@@ -1,32 +1,34 @@
 <template>
   <div class="column">
-    <h3>Swapi</h3>
-    <button @click="getResources('people')" :disabled="isPeopleButtonHidden"> GET PEOPLE </button>
-    <button @click="getResources('starships')" :disabled="isStarshipButtonHidden"> GET STARSHIP </button>
-    
+    <div class="container">
+      <h3>Swapi</h3>
+      <button class="btn btn-primary" @click="getResources('people')" :disabled="isPeopleButtonHidden"> GET PEOPLE </button>
+      <button class="btn btn-primary" @click="getResources('starships')" :disabled="isStarshipButtonHidden"> GET STARSHIP </button>
+      
 
-    <form @submit.prevent="searchResources('people')" v-if="resource === 'people'">
-      <label for="name"> Search People: </label>
-      <input type="text" name="name" v-model="searchTerm">
-      <input type="submit" value="Search"> {{searchResult}}
-    </form>
+      <form @submit.prevent="searchResources('people')" v-if="resource === 'people'">
+        <label for="name"> Search People: </label>
+        <input type="text" name="name" v-model="searchTerm">
+        <input class="btn btn-info" type="submit" value="Search"> {{searchResult}}
+      </form>
 
-    <form @submit.prevent="searchResources('starships')" v-if="resource === 'starships'">
-      <label for="name"> Search Ship: </label>
-      <input type="text" name="name" v-model="searchTerm">
-      <input type="submit" value="Search"> {{searchResult}}
-    </form>
+      <form @submit.prevent="searchResources('starships')" v-if="resource === 'starships'">
+        <label for="name"> Search Ship: </label>
+        <input type="text" name="name" v-model="searchTerm">
+        <input class="btn btn-info" type="submit" value="Search"> {{searchResult}}
+      </form>
 
-    <div v-if="resource !== null">
-      <p
-      v-for="resource in resources"
-      :key="resource.name"
-      @click="showItem(resource)"
-      >{{resource.name}}</p>
-    </div>
+      <div v-if="resource !== null">
+        <p
+        v-for="resource in resources"
+        :key="resource.name"
+        @click="showItem(resource)"
+        >{{resource.name}}</p>
+      </div>
 
-    <div class="loadMoreButton" v-if="resource !== null">
-      <button @click="loadMoreResourceItems(resource)" :disabled="isLoadMoreBUttonDisabled"> LOAD MORE </button>
+      <div class="loadMoreButton" v-if="resource !== null">
+        <button class="btn btn-secondary" @click="loadMoreResourceItems(resource)" :disabled="isLoadMoreBUttonDisabled"> LOAD MORE </button>
+      </div>
     </div>
   </div>
 </template>
