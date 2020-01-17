@@ -1,6 +1,8 @@
 import swapi from "../../api/swapi"
 
 const state = {
+    item: Object,
+    isShowingShowcase: false,
     resources: [],
     homeworld: '',
     starships: [],
@@ -19,6 +21,9 @@ const getters = {
     },
     allPilots(state) {
         return state.pilots;
+    },
+    allItem(state) {
+        return state.item; 
     }
 }
 
@@ -37,7 +42,11 @@ const mutations = {
     setPilots: (state, payload) => {
         state.pilots.push(payload.pilots)
     },
-    setPilotsToEmpty: (state) => state.pilots = []
+    setPilotsToEmpty: (state) => state.pilots = [],
+    setItem: (state, item) => {
+        state.isShowingShowcase = true
+        state.item = item 
+    }
 }
 
 const actions = {

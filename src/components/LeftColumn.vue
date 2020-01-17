@@ -26,9 +26,29 @@
         >{{resource.name}}</p>
       </div>
 
-      <div class="loadMoreButton" v-if="resource !== null">
-        <button class="btn btn-secondary" @click="loadMoreResourceItems(resource)" :disabled="isLoadMoreBUttonDisabled"> LOAD MORE </button>
-      </div>
+      <nav aria-label="..." v-if="resource === 'people'">
+        <ul class="pagination pagination-sm">
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(1, 'people')">1</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(2, 'people')">2</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(3, 'people')">3</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(4, 'people')">4</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(5, 'people')">5</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(6, 'people')">6</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(7, 'people')">7</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(8, 'people')">8</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(9, 'people')">9</a></li>
+        </ul>
+      </nav>
+
+      <nav aria-label="..." v-else-if="resource === 'starships'">
+        <ul class="pagination pagination-sm">
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(1, 'starships')">1</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(2, 'starships')">2</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(3, 'starships')">3</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(4, 'starships')">4</a></li>
+          <li class="page-item"><a class="page-link" @click="loadMoreResourceItems(5, 'starships')">5</a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 </template>
@@ -49,10 +69,6 @@ export default {
       searchTerm: '',
       searchResult: '',
 
-      currentPeoplePage: 2,
-      currentStarshipPage: 2,
-
-      isLoadMoreBUttonDisabled: false,
       isPeopleButtonHidden: false, 
       isStarshipButtonHidden: false,
     }
@@ -60,8 +76,6 @@ export default {
   watch: {
     resources() {
       this.buttonToggle(this.resource)
-      // eslint-disable-next-line no-console
-      console.log("changes")
     }
   },
 
@@ -77,8 +91,7 @@ export default {
     },
 
     showItem(item) {
-      //emit item to component above.
-      this.$emit('item', item);
+      this.$store.commit('setItem', item);
     },
 
     searchResources(resource){
@@ -88,20 +101,11 @@ export default {
       });
     },
 
-    loadMoreResourceItems(resource){
-      if(this.currentPeoplePage < 9 && resource === "people"){
-        this.$store.dispatch('loadItems', {
-          resource, 
-          page: this.currentPeoplePage
-        });
-        this.currentPeoplePage++
-      } else if(this.currentStarshipPage < 5 && resource === "starships") {
-          this.$store.dispatch('loadItems', {
-            resource, 
-            page: this.currentStarshipPage
-          })
-          this.currentStarshipPage++
-      }
+    loadMoreResourceItems(page, resource){
+      this.$store.dispatch('loadItems', {
+        resource, 
+        page
+      });
     },
     buttonToggle(resource){
       if(resource === 'people') {
@@ -136,6 +140,9 @@ export default {
   }
   h3{
     text-align: center;
+  }
+  nav {
+    cursor: pointer;
   }
 
 </style>

@@ -14,13 +14,8 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'Starship',
-    props: {
-        item: {
-            type: Object
-        }
-    },
     computed: {
-        ...mapState(['pilots'])
+        ...mapState(['pilots', 'item'])
     }
 }
 </script>

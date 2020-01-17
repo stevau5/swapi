@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <LeftColumn v-on:item="onReceiveItem"/>
-    <div v-if="currentItem">
-      <Showcase :item="currentItem"/> 
+    <LeftColumn />
+    <div v-if="isShowingShowcase">
+      <Showcase/> 
     </div>
   </div>
 </template>
@@ -10,6 +10,7 @@
 <script>
 import LeftColumn from './components/LeftColumn.vue'
 import Showcase from './components/Showcase'
+import { mapState } from 'vuex'
 
 
 export default {
@@ -19,16 +20,9 @@ export default {
     Showcase,
     
   },
-  data() {
-    return {
-      currentItem: null
-    }
-  },
-  methods: {
-    onReceiveItem(item) {
-      this.currentItem = item;
-    }
-  }
+  computed:{
+      ...mapState(['item', 'isShowingShowcase'])
+    },
 }
 </script>
 

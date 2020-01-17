@@ -2,8 +2,8 @@
     <div class="showcase">
         <h3>Results</h3>
         <div class="slots">
-            <Pilot :item="item" v-if="isPerson"></Pilot>
-            <Starship :item="item" v-else></Starship>
+            <Pilot v-if="isPerson"></Pilot>
+            <Starship  v-else></Starship>
         </div>
     </div>
 </template>
@@ -18,11 +18,6 @@ export default {
     components: {
         Pilot,
         Starship
-    },
-    props: {
-        item: {
-            type: Object
-        },
     },
     watch: {
         item() {
@@ -46,7 +41,7 @@ export default {
         isPerson() {
             return this.item.hasOwnProperty("birth_year");
         },
-        ...mapState(['homeworld', 'starships', 'pilots'])
+        ...mapState(['homeworld', 'starships', 'pilots', 'item'])
     },
     methods: {
         getHomeworld() {
@@ -72,10 +67,6 @@ export default {
                 })
                 this.p_counter = 1
             }
-        },
-        test() {
-            // eslint-disable-next-line no-console
-            console.log("hello world")
         }
     }
 }
