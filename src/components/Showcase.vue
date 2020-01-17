@@ -72,6 +72,10 @@ export default {
                 })
                 this.p_counter = 1
             }
+        },
+        test() {
+            // eslint-disable-next-line no-console
+            console.log("hello world")
         }
     }
 }
